@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// This project is made for a test assignment
 
 #include "Logic/GameModes/AIRRaceGameMode.h"
 #include "Characters/AIRPlayerCharacter.h"
