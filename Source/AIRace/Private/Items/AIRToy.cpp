@@ -6,9 +6,19 @@
 
 #include "Net/UnrealNetwork.h"
 
+void AAIRToy::SetToyData(int32 DataIndex)
+{
+    if (!DefaultToyData.IsValidIndex(DataIndex)) return;
+
+    ToyValue = DefaultToyData[DataIndex].Value;
+
+    if (!ItemMeshComponent) return;
+    ItemMeshComponent->SetStaticMesh(DefaultToyData[DataIndex].ToyStaticMesh);
+}
+
 void AAIRToy::PrimaryUse()
 {
-    if (!InHands) return;
+    if (!CanUseItem()) return;
 
     InHands = false;
 
@@ -17,9 +27,11 @@ void AAIRToy::PrimaryUse()
 
 void AAIRToy::SeconderyUse()
 {
-    InHands = true;
+    if (!CanUseItem()) return;
 
-    OnRep_InHands();
+    ToyDataIndex = ++ToyDataIndex % DefaultToyData.Num();
+
+    OnRep_ToyDataIndex();
 }
 
 void AAIRToy::ThrowToy()
@@ -49,6 +61,11 @@ void AAIRToy::OnRep_InHands()
     InHands ? ReturnToy() : ThrowToy();
 }
 
+void AAIRToy::OnRep_ToyDataIndex()
+{
+    SetToyData(ToyDataIndex);
+}
+
 FVector AAIRToy::GetLaunchVelocity() const
 {
     if (!GetOwnerCharacter()) return FVector();
@@ -65,4 +82,10 @@ void AAIRToy::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeP
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
     DOREPLIFETIME(AAIRToy, InHands);
+    DOREPLIFETIME(AAIRToy, ToyDataIndex);
+}
+
+bool AAIRToy::CanUseItem() const
+{
+    return InHands;
 }

@@ -44,7 +44,7 @@ void AAIRPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
         EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AAIRPlayerCharacter::Look);
 
         EnhancedInputComponent->BindAction(PrimaryUseAction, ETriggerEvent::Triggered, this, &AAIRPlayerCharacter::ItemPrimaryUse);
-        EnhancedInputComponent->BindAction(SeconderyUseAction, ETriggerEvent::Triggered, this, &AAIRPlayerCharacter::ItemSeconderyUse);
+        EnhancedInputComponent->BindAction(SeconderyUseAction, ETriggerEvent::Started, this, &AAIRPlayerCharacter::ItemSeconderyUse);
     }
 }
 
