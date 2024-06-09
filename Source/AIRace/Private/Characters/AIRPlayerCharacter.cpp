@@ -50,16 +50,18 @@ void AAIRPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 
 void AAIRPlayerCharacter::GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation) const
 {
+    Super::GetActorEyesViewPoint(OutLocation, OutRotation);
+
     if (!MainCamera)
     {
         OutLocation = GetActorLocation();
-        OutRotation = GetControlRotation();
+        OutRotation = GetBaseAimRotation();
 
         return;
     }
 
     OutLocation = MainCamera->GetComponentLocation();
-    OutRotation = GetBaseAimRotation();
+    OutRotation = MainCamera->GetComponentRotation();
 }
 
 void AAIRPlayerCharacter::Move(const FInputActionValue& Value)

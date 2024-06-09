@@ -35,11 +35,11 @@ void AAIRToy::ThrowToy()
     DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 }
 
-void AAIRToy::ReturnToy() 
+void AAIRToy::ReturnToy()
 {
-    if (!OwnerCharacter) return;
+    if (!GetOwnerCharacter()) return;
 
-    const auto AttachComponent = OwnerCharacter->GetItemAttachComponent();
+    const auto AttachComponent = GetOwnerCharacter()->GetItemAttachComponent();
 
     AttachToOwner();
 }
@@ -51,12 +51,9 @@ void AAIRToy::OnRep_InHands()
 
 FVector AAIRToy::GetLaunchVelocity() const
 {
-    if (!GetOwner()) return FVector();
+    if (!GetOwnerCharacter()) return FVector();
 
-    FVector LaunchLocation;
-    FRotator LaunchRotation;
-
-    GetOwner()->GetActorEyesViewPoint(LaunchLocation, LaunchRotation);
+    FRotator LaunchRotation = GetOwnerCharacter()->GetBaseAimRotation();
 
     FVector LaunchVelocity = LaunchRotation.Vector() * ThrowDistance;
 

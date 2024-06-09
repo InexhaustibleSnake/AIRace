@@ -26,6 +26,8 @@ public:
     TObjectPtr<AAIRPlayerCharacter> GetOwnerCharacter() const;
 
 protected:
+    virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
     FTransform GetItemSpawnTransform() const;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
@@ -37,6 +39,6 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Items")
     float VerticalSpawnOffset = -25.0f;
 
-    UPROPERTY()
+    UPROPERTY(Replicated)
     TObjectPtr<AAIRPlayerCharacter> OwnerCharacter;
 };

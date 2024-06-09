@@ -23,10 +23,10 @@ public:
 
     USceneComponent* GetItemAttachComponent() const;
 
+    virtual void GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation) const override;
+
 protected:
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-    virtual void GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation) const override;
 
     void Move(const FInputActionValue& Value);
     void Look(const FInputActionValue& Value);

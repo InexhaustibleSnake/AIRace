@@ -4,6 +4,10 @@
 #include "Characters/AIRPlayerCharacter.h"
 #include "Kismet/KismetMathLibrary.h"
 
+#include "GameFramework/PlayerController.h"
+#include "DrawDebugHelpers.h"
+#include "Net/UnrealNetwork.h"
+
 AAIRBaseItem::AAIRBaseItem()
 {
     PrimaryActorTick.bCanEverTick = false;
@@ -46,12 +50,12 @@ TObjectPtr<AAIRPlayerCharacter> AAIRBaseItem::GetOwnerCharacter() const
 
 FTransform AAIRBaseItem::GetItemSpawnTransform() const
 {
-    if (!GetOwner()) return FTransform();
+    if (!GetOwnerCharacter()) return FTransform();
 
     FVector SpawnLocation;
     FRotator SpawnRotation;
 
-    GetOwner()->GetActorEyesViewPoint(SpawnLocation, SpawnRotation);
+    GetOwnerCharacter()->GetActorEyesViewPoint(SpawnLocation, SpawnRotation);
 
     FVector InverseLocation = UKismetMathLibrary::InverseTransformLocation(GetActorTransform(), SpawnLocation);
 
@@ -65,4 +69,11 @@ FTransform AAIRBaseItem::GetItemSpawnTransform() const
     FVector SpawnScale = GetOwner()->GetActorScale();
 
     return FTransform(SpawnRotation, SpawnLocation, SpawnScale);
+}
+
+void AAIRBaseItem::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+    DOREPLIFETIME(AAIRBaseItem, OwnerCharacter);
 }
