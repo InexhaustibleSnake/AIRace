@@ -26,9 +26,13 @@ protected:
 protected:
     void InitItems();
 
-    FTransform GetItemSpawnTransform() const;
+    UFUNCTION(Server, Unreliable)
+    void ServerPrimaryUse();
+    void ServerPrimaryUse_Implementation();
 
-    UActorComponent* GetItemAttachComponent() const;
+    UFUNCTION(Server, Unreliable)
+    void ServerSeconderyUse();
+    void ServerSeconderyUse_Implementation();
 
     AAIRPlayerCharacter* GetOwnerCharacter() const;
 
@@ -37,10 +41,4 @@ protected:
 
     UPROPERTY(BlueprintReadOnly, Category = "Items")
     TObjectPtr<AAIRBaseItem> CurrentItem;
-
-    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Items")
-    float ForwardSpawnOffset = 50.0f;
-
-    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Items")
-    float VerticalSpawnOffset = -25.0f;
 };

@@ -7,61 +7,69 @@
 UAIRItemComponent::UAIRItemComponent()
 {
     PrimaryComponentTick.bCanEverTick = false;
+
+    SetIsReplicatedByDefault(true);
 }
 
 void UAIRItemComponent::BeginPlay()
 {
     Super::BeginPlay();
 
-    if (GetOwner() || GetOwner()->HasAuthority())
-    {
-        InitItems();
-    }
+    InitItems();
 }
 
 void UAIRItemComponent::PrimaryUse()
 {
+    if (!GetOwner()) return;
+
+    if (!GetOwner()->HasAuthority())
+    {
+        ServerPrimaryUse();
+        return;
+    }
+
     if (!CurrentItem) return;
 
     CurrentItem->PrimaryUse();
 }
 
+void UAIRItemComponent::ServerPrimaryUse_Implementation()
+{
+    PrimaryUse();
+}
+
 void UAIRItemComponent::SeconderyUse()
 {
-    if (!CurrentItem) return;
+    if (!GetOwner()) return;
+
+    if (!GetOwner()->HasAuthority())
+    {
+        ServerSeconderyUse();
+        return;
+    }
 
     CurrentItem->SeconderyUse();
 }
 
+void UAIRItemComponent::ServerSeconderyUse_Implementation()
+{
+    SeconderyUse();
+}
+
 void UAIRItemComponent::InitItems()
 {
-    if (!GetWorld()) return;
+    if (!GetWorld() || !GetOwner()->HasAuthority()) return;
 
     const auto SpawnedItem = GetWorld()->SpawnActor<AAIRBaseItem>(AvaibleItemClass);
     if (!SpawnedItem || !GetOwnerCharacter()) return;
 
     SpawnedItem->SetOwner(GetOwner());
 
-    SpawnedItem->AttachToComponent(GetOwnerCharacter()->GetItemAttachComponent(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+    SpawnedItem->SetOwnerCharacter(Cast<AAIRPlayerCharacter>(GetOwner()));
 
-    SpawnedItem->SetActorTransform(GetItemSpawnTransform());
-}
+    SpawnedItem->AttachToOwner();
 
-FTransform UAIRItemComponent::GetItemSpawnTransform() const
-{
-    if (!GetOwner()) return FTransform();
-
-    FVector SpawnLocation;
-    FRotator SpawnRotation;
-
-    GetOwner()->GetActorEyesViewPoint(SpawnLocation, SpawnRotation);
-
-    SpawnLocation += (SpawnRotation.Vector() * ForwardSpawnOffset);
-    SpawnLocation.Z += VerticalSpawnOffset;
-
-    FVector SpawnScale = GetOwner()->GetActorScale();
-
-    return FTransform(SpawnRotation, SpawnLocation, SpawnScale);
+    CurrentItem = SpawnedItem;
 }
 
 AAIRPlayerCharacter* UAIRItemComponent::GetOwnerCharacter() const
