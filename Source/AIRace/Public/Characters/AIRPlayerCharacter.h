@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// This project is made for a test assignment
 
 #pragma once
 
@@ -7,6 +7,7 @@
 #include "AIRPlayerCharacter.generated.h"
 
 class UCameraComponent;
+class UAIRItemComponent;
 
 class UInputAction;
 class UInputMappingContext;
@@ -20,14 +21,24 @@ class AIRACE_API AAIRPlayerCharacter : public AAIRBaseCharacter
 public:
     AAIRPlayerCharacter();
 
+    USceneComponent* GetItemAttachComponent() const;
+
 protected:
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+    virtual void GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation) const override;
 
     void Move(const FInputActionValue& Value);
     void Look(const FInputActionValue& Value);
 
+    virtual void ItemPrimaryUse();
+    virtual void ItemSeconderyUse();
+
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
     TObjectPtr<UCameraComponent> MainCamera;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
+    TObjectPtr<UAIRItemComponent> AIRItemComponent;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Input")
     UInputMappingContext* DefaultMappingContext;
@@ -40,6 +51,12 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Input")
     UInputAction* LookAction;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Input")
+    UInputAction* PrimaryUseAction;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Input")
+    UInputAction* SeconderyUseAction;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Input")
     FVector2D LookInputScale = FVector2D(90.0f, 90.0f);

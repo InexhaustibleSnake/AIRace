@@ -4,6 +4,8 @@
 
 #include "Camera/CameraComponent.h"
 
+#include "Components/AIRItemComponent.h"
+
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
@@ -13,6 +15,8 @@ AAIRPlayerCharacter::AAIRPlayerCharacter()
     MainCamera = CreateDefaultSubobject<UCameraComponent>("MainCamera");
     MainCamera->SetupAttachment(GetRootComponent());
     MainCamera->bUsePawnControlRotation = true;
+
+    AIRItemComponent = CreateDefaultSubobject<UAIRItemComponent>("AIRItemComponent");
 
     GetMesh()->SetOwnerNoSee(true);
 }
@@ -38,7 +42,24 @@ void AAIRPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
         EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAIRPlayerCharacter::Move);
 
         EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AAIRPlayerCharacter::Look);
+
+        EnhancedInputComponent->BindAction(PrimaryUseAction, ETriggerEvent::Triggered, this, &AAIRPlayerCharacter::ItemPrimaryUse);
+        EnhancedInputComponent->BindAction(SeconderyUseAction, ETriggerEvent::Triggered, this, &AAIRPlayerCharacter::ItemSeconderyUse);
     }
+}
+
+void AAIRPlayerCharacter::GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation) const
+{
+    if (!MainCamera)
+    {
+        OutLocation = GetActorLocation();
+        OutRotation = GetControlRotation();
+
+        return;
+    }
+
+    OutLocation = MainCamera->GetComponentLocation();
+    OutRotation = MainCamera->GetComponentRotation();
 }
 
 void AAIRPlayerCharacter::Move(const FInputActionValue& Value)
@@ -59,4 +80,23 @@ void AAIRPlayerCharacter::Look(const FInputActionValue& Value)
 
     AddControllerYawInput(LookVector.X * DeltatTime * LookInputScale.X);
     AddControllerPitchInput(LookVector.Y * DeltatTime * LookInputScale.Y);
+}
+
+void AAIRPlayerCharacter::ItemPrimaryUse()
+{
+    if (!AIRItemComponent) return;
+
+    AIRItemComponent->PrimaryUse();
+}
+
+void AAIRPlayerCharacter::ItemSeconderyUse()
+{
+    if (!AIRItemComponent) return;
+
+    AIRItemComponent->SeconderyUse();
+}
+
+USceneComponent* AAIRPlayerCharacter::GetItemAttachComponent() const
+{
+    return MainCamera;
 }
