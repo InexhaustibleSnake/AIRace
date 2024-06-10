@@ -7,3 +7,6 @@ AAIRAIController::AAIRAIController()
 {
     AIPerceptionComponent = CreateDefaultSubobject <UAIPerceptionComponent>("AIPerceptionComponent");
 }
+
+void AAIRAIController::SetTargetToy_Implementation(const AAIRToy* TargetToy) {}
+

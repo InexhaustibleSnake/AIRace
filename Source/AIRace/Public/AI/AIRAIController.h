@@ -7,6 +7,7 @@
 #include "AIRAIController.generated.h"
 
 class UAIPerceptionComponent;
+class AAIRToy;
 
 UCLASS()
 class AIRACE_API AAIRAIController : public AAIController
@@ -15,6 +16,10 @@ class AIRACE_API AAIRAIController : public AAIController
 
 public:
     AAIRAIController();
+
+    UFUNCTION(BlueprintNativeEvent, Category = "AI")
+    void SetTargetToy(const AAIRToy* TargetToy);
+    void SetTargetToy_Implementation(const AAIRToy* TargetToy);
 
 protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI")

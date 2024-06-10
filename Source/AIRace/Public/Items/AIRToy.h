@@ -6,6 +6,10 @@
 #include "Items/AIRBaseItem.h"
 #include "AIRToy.generated.h"
 
+class AAIRRaceGameMode;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnToyUsedSignature, AAIRToy*, InToy);
+
 USTRUCT(BlueprintType)
 struct FToyData
 {
@@ -27,7 +31,12 @@ public:
     virtual void PrimaryUse() override;
     virtual void SeconderyUse() override;
 
+    FOnToyUsedSignature OnToyUsed;
+
 protected:
+    virtual void BeginPlay() override;
+    virtual void Destroyed() override;
+
     void SetToyData(int32 DataIndex);
 
     void ThrowToy();
@@ -42,6 +51,8 @@ protected:
 
     UFUNCTION()
     void OnRep_ToyDataIndex();
+
+    AAIRRaceGameMode* GetGameMode() const;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Toy")
     float ThrowDistance = 2000.0f;

@@ -3,8 +3,29 @@
 #include "Items/AIRToy.h"
 
 #include "Characters/AIRPlayerCharacter.h"
+#include "Logic/GameModes/AIRRaceGameMode.h"
 
 #include "Net/UnrealNetwork.h"
+
+void AAIRToy::BeginPlay()
+{
+    Super::BeginPlay();
+
+    if (GetGameMode())
+    {
+        GetGameMode()->OnNewToySpawned(this);
+    }
+}
+
+void AAIRToy::Destroyed()
+{
+    Super::Destroyed();
+
+    if (GetGameMode())
+    {
+        GetGameMode()->OnToyDestroyed(this);
+    }
+}
 
 void AAIRToy::SetToyData(int32 DataIndex)
 {
@@ -45,6 +66,8 @@ void AAIRToy::ThrowToy()
     ItemMeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 
     DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+
+    OnToyUsed.Broadcast(this);
 }
 
 void AAIRToy::ReturnToy()
@@ -64,6 +87,11 @@ void AAIRToy::OnRep_InHands()
 void AAIRToy::OnRep_ToyDataIndex()
 {
     SetToyData(ToyDataIndex);
+}
+
+AAIRRaceGameMode* AAIRToy::GetGameMode() const
+{
+    return GetWorld() ? Cast<AAIRRaceGameMode>(GetWorld()->GetAuthGameMode()) : nullptr;
 }
 
 FVector AAIRToy::GetLaunchVelocity() const

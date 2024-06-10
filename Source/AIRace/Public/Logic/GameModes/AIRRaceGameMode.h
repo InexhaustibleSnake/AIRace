@@ -6,6 +6,8 @@
 #include "GameFramework/GameModeBase.h"
 #include "AIRRaceGameMode.generated.h"
 
+class AAIRToy;
+
 UCLASS()
 class AIRACE_API AAIRRaceGameMode : public AGameModeBase
 {
@@ -13,4 +15,11 @@ class AIRACE_API AAIRRaceGameMode : public AGameModeBase
 
 public:
     AAIRRaceGameMode();
+
+    void OnNewToySpawned(AAIRToy* NewToy);
+    void OnToyDestroyed(AAIRToy* DestroyedToy);
+
+protected:
+    UFUNCTION()
+    void OnToyUsed(AAIRToy* NewToy);
 };
