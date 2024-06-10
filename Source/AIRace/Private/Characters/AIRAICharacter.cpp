@@ -3,6 +3,7 @@
 #include "Characters/AIRAICharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/TextRenderComponent.h"
+#include "AI/AIRAIController.h"
 
 AAIRAICharacter::AAIRAICharacter()
 {
@@ -13,6 +14,8 @@ AAIRAICharacter::AAIRAICharacter()
     BotNameText->SetRelativeLocation(BotNameTextLocation);
     BotNameText->HorizontalAlignment = EHorizTextAligment::EHTA_Center;
     BotNameText->WorldSize = 10.0f;
+
+    AIControllerClass = AAIRAIController::StaticClass();
 }
 
 void AAIRAICharacter::BeginPlay()
