@@ -10,7 +10,7 @@ AAIRAIController::AAIRAIController()
     bWantsPlayerState = true;
 }
 
-void AAIRAIController::SetTargetToy_Implementation(const AAIRToy* TargetToy) 
+void AAIRAIController::SetTargetToy_Implementation(const AAIRToy* TargetToy)
 {
     ChasingToy = true;
 }
@@ -18,6 +18,7 @@ void AAIRAIController::SetTargetToy_Implementation(const AAIRToy* TargetToy)
 void AAIRAIController::ClearTargetToy()
 {
     ChasingToy = false;
+    StopMovement();
 }
 
 void AAIRAIController::PickupToy(AAIRToy* TargetToy)

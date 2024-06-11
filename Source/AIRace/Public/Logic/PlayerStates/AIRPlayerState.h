@@ -17,7 +17,7 @@ public:
     UPROPERTY(BlueprintAssignable, Category = "PlayerState")
     FOnScoreChangedSignature OnScoreChanged;
 
-    void AddScores(float Amount); // Default SetScore doesn't trigger OnRep_Score()
+    void AddScores(float Amount);  // Default SetScore doesn't trigger OnRep_Score()
 
 protected:
     virtual void OnRep_Score() override;

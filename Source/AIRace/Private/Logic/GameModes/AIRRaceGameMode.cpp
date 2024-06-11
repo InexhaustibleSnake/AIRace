@@ -91,7 +91,7 @@ void AAIRRaceGameMode::OnToyPickedUp(AAIRToy* Toy, AAIRAIController* ByAIControl
 
     Toy->ReturnToy();
 
-    for (auto OneAIController : FindActorsOfClass<AAIRAIController>(AAIRAIController::StaticClass()))
+    for (auto OneAIController : AIControllers)
     {
         if (!OneAIController) continue;
 
