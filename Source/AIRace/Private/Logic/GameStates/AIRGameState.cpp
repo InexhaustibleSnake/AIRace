@@ -15,13 +15,6 @@ void AAIRGameState::GameTimerUpdate()
     --RemainingMatchTime;
 }
 
-void AAIRGameState::AddPlayerState(APlayerState* PlayerState)
-{
-    Super::AddPlayerState(PlayerState);
-
-    OnPlayerStateAdded.Broadcast(PlayerState);
-}
-
 void AAIRGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
