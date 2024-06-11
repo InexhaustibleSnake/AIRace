@@ -10,7 +10,7 @@ class UAIPerceptionComponent;
 class AAIRToy;
 class AAIRAICharacter;
 
-DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnToyPickedUpSignature, AAIRToy*, PickedupToy, AAIRAICharacter*, ByCharacter);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnToyPickedUpSignature, AAIRToy*, PickedupToy, AAIRAIController*, ByAIController);
 
 UCLASS()
 class AIRACE_API AAIRAIController : public AAIController

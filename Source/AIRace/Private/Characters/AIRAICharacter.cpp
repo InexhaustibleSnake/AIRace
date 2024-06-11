@@ -44,15 +44,3 @@ void AAIRAICharacter::SetBotNameText(const FText& NewText)
 
     BotNameText->SetText(NewText);
 }
-
-void AAIRAICharacter::AddScores(int32 Amount)
-{
-    Score = FMath::Clamp(Amount, 0, INT32_MAX);
-}
-
-void AAIRAICharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-    DOREPLIFETIME(AAIRAICharacter, Score);
-}

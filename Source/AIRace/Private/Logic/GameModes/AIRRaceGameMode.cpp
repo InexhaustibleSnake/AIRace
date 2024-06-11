@@ -1,6 +1,7 @@
 // This project is made for a test assignment
 
 #include "Logic/GameModes/AIRRaceGameMode.h"
+#include "Logic/PlayerStates/AIRPlayerState.h"
 #include "Characters/AIRPlayerCharacter.h"
 #include "Characters/AIRAICharacter.h"
 #include "AI/AIRAIController.h"
@@ -10,6 +11,7 @@
 AAIRRaceGameMode::AAIRRaceGameMode()
 {
     DefaultPawnClass = AAIRPlayerCharacter::StaticClass();
+    PlayerStateClass = AAIRPlayerState::StaticClass();
 }
 
 void AAIRRaceGameMode::BeginPlay()
@@ -79,23 +81,7 @@ void AAIRRaceGameMode::SetCanToysBeUsed(bool CanBeUsed)
     }
 }
 
-TArray<AAIRAIController*> AAIRRaceGameMode::GetAIControllers() const
-{
-    if (!GetWorld()) return TArray<AAIRAIController*>();
-
-    TArray<AAIRAIController*> ReceivedAIControllers;
-
-    for (TActorIterator<AAIRAIController> OneAIController(GetWorld()); OneAIController; ++OneAIController)
-    {
-        if (!OneAIController) continue;
-
-        ReceivedAIControllers.Add(*OneAIController);
-    }
-
-    return ReceivedAIControllers;
-}
-
-void AAIRRaceGameMode::OnToyPickedUp(AAIRToy* Toy, AAIRAICharacter* ByAICharacter)
+void AAIRRaceGameMode::OnToyPickedUp(AAIRToy* Toy, AAIRAIController* ByAIController)
 {
     SetCanToysBeUsed(true);
 
@@ -110,7 +96,10 @@ void AAIRRaceGameMode::OnToyPickedUp(AAIRToy* Toy, AAIRAICharacter* ByAICharacte
         OneAIController->ClearTargetToy();
     }
 
-    if (!ByAICharacter) return;
+    if (!ByAIController) return;
 
-    ByAICharacter->AddScores(ByAICharacter->GetScores() + Toy->GetToyValue());
+    const auto AIRPlayerState = ByAIController->GetPlayerState<AAIRPlayerState>();
+    if (!AIRPlayerState) return;
+
+    AIRPlayerState->SetScore(AIRPlayerState->GetScore() + Toy->GetToyValue());
 }

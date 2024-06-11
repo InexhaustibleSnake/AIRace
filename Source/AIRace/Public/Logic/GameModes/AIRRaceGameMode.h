@@ -24,7 +24,7 @@ public:
     void OnToyDestroyed(AAIRToy* DestroyedToy);
 
     UFUNCTION()
-    void OnToyPickedUp(AAIRToy* Toy, AAIRAICharacter* ByAICharacter);
+    void OnToyPickedUp(AAIRToy* Toy, AAIRAIController* ByAIController);
 
 protected:
     virtual void BeginPlay() override;
@@ -53,8 +53,6 @@ protected:
 
         return ReceivedActors;
     }
-
-    TArray<AAIRAIController*> GetAIControllers() const;
 
     TArray<AAIRAIController*> AIControllers;
 

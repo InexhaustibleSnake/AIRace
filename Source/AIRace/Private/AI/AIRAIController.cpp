@@ -2,11 +2,12 @@
 
 #include "AI/AIRAIController.h"
 #include "Perception/AIPerceptionComponent.h"
-#include "Characters/AIRAICharacter.h"
 
 AAIRAIController::AAIRAIController()
 {
     AIPerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>("AIPerceptionComponent");
+
+    bWantsPlayerState = true;
 }
 
 void AAIRAIController::SetTargetToy_Implementation(const AAIRToy* TargetToy) 
@@ -21,7 +22,5 @@ void AAIRAIController::ClearTargetToy()
 
 void AAIRAIController::PickupToy(AAIRToy* TargetToy)
 {
-    const auto ControlledPawn = Cast<AAIRAICharacter>(GetPawn());
-
-    OnToyPickedUp.ExecuteIfBound(TargetToy, ControlledPawn);
+    OnToyPickedUp.ExecuteIfBound(TargetToy, this);
 }
