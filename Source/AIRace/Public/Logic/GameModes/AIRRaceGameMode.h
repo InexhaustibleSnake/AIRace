@@ -7,6 +7,8 @@
 #include "AIRRaceGameMode.generated.h"
 
 class AAIRToy;
+class AAIRAICharacter;
+class AAIRAIController;
 
 UCLASS()
 class AIRACE_API AAIRRaceGameMode : public AGameModeBase
@@ -19,7 +21,17 @@ public:
     void OnNewToySpawned(AAIRToy* NewToy);
     void OnToyDestroyed(AAIRToy* DestroyedToy);
 
+    UFUNCTION()
+    void OnToyPickedUp(AAIRToy* Toy, AAIRAICharacter* ByAICharacter);
+
 protected:
+    virtual void BeginPlay() override;
+
+    UFUNCTION()
+    void OnAIControllerDestroyed(AActor* DestroyedAIActor);
+
     UFUNCTION()
     void OnToyUsed(AAIRToy* NewToy);
+
+    TArray<AAIRAIController*> GetAIControllers() const;
 };

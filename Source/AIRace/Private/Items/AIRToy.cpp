@@ -17,16 +17,6 @@ void AAIRToy::BeginPlay()
     }
 }
 
-void AAIRToy::Destroyed()
-{
-    Super::Destroyed();
-
-    if (GetGameMode())
-    {
-        GetGameMode()->OnToyDestroyed(this);
-    }
-}
-
 void AAIRToy::SetToyData(int32 DataIndex)
 {
     if (!DefaultToyData.IsValidIndex(DataIndex)) return;
@@ -72,16 +62,14 @@ void AAIRToy::ThrowToy()
 
 void AAIRToy::ReturnToy()
 {
-    if (!GetOwnerCharacter()) return;
+    InHands = true;
 
-    const auto AttachComponent = GetOwnerCharacter()->GetItemAttachComponent();
-
-    AttachToOwner();
+    OnRep_InHands();
 }
 
 void AAIRToy::OnRep_InHands()
 {
-    InHands ? ReturnToy() : ThrowToy();
+    InHands ? AttachToOwner() : ThrowToy();
 }
 
 void AAIRToy::OnRep_ToyDataIndex()

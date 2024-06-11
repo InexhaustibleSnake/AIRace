@@ -16,8 +16,14 @@ class AIRACE_API AAIRAICharacter : public AAIRBaseCharacter
 public:
     AAIRAICharacter();
 
+    UFUNCTION(BlueprintCallable, Category = "Scores")
+    int32 GetScores() const { return Score; }
+
+    void AddScores(int32 Amount);
+
 protected:
     virtual void BeginPlay() override;
+    virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
     void SetMovementSpeed(float NewMovementSpeed);
 
@@ -31,4 +37,7 @@ protected:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
     UTextRenderComponent* BotNameText;
+
+    UPROPERTY(Replicated)
+    int32 Score = 0;
 };

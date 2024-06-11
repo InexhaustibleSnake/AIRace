@@ -31,16 +31,19 @@ public:
     virtual void PrimaryUse() override;
     virtual void SeconderyUse() override;
 
+    void ReturnToy();
+
     FOnToyUsedSignature OnToyUsed;
+
+    UFUNCTION(BlueprintCallable)
+    int32 GetToyValue() const { return ToyValue; }
 
 protected:
     virtual void BeginPlay() override;
-    virtual void Destroyed() override;
 
     void SetToyData(int32 DataIndex);
 
     void ThrowToy();
-    void ReturnToy();
 
     virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 

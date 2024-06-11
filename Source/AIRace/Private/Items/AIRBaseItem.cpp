@@ -27,13 +27,13 @@ void AAIRBaseItem::SeconderyUse() {}
 
 void AAIRBaseItem::AttachToOwner()
 {
-    AttachToComponent(GetOwnerCharacter()->GetItemAttachComponent(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-
-    SetActorTransform(GetItemSpawnTransform());
-
     if (!ItemMeshComponent) return;
 
     ItemMeshComponent->SetSimulatePhysics(false);
+
+    AttachToComponent(GetOwnerCharacter()->GetItemAttachComponent(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+
+    SetActorTransform(GetItemSpawnTransform());
 }
 
 void AAIRBaseItem::SetOwnerCharacter(TObjectPtr<AAIRPlayerCharacter> NewOwnerCharacrter)

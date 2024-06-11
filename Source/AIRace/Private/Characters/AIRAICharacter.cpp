@@ -4,6 +4,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/TextRenderComponent.h"
 #include "AI/AIRAIController.h"
+#include "Net/UnrealNetwork.h"
 
 AAIRAICharacter::AAIRAICharacter()
 {
@@ -42,4 +43,16 @@ void AAIRAICharacter::SetBotNameText(const FText& NewText)
     if (!BotNameText) return;
 
     BotNameText->SetText(NewText);
+}
+
+void AAIRAICharacter::AddScores(int32 Amount)
+{
+    Score = FMath::Clamp(Amount, 0, INT32_MAX);
+}
+
+void AAIRAICharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+    DOREPLIFETIME(AAIRAICharacter, Score);
 }
