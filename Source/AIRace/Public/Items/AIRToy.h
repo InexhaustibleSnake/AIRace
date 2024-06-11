@@ -16,7 +16,7 @@ struct FToyData
     GENERATED_USTRUCT_BODY()
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Toy")
-    UStaticMesh* ToyStaticMesh;
+    UStaticMesh* ToyStaticMesh = nullptr;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Toy", meta = (ClampMin = "0"))
     int32 Value = 1;

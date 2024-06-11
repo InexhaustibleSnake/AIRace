@@ -2,7 +2,6 @@
 
 #include "AI/AIRAIController.h"
 #include "Perception/AIPerceptionComponent.h"
-#include "Logic/GameModes/AIRRaceGameMode.h"
 #include "Characters/AIRAICharacter.h"
 
 AAIRAIController::AAIRAIController()
@@ -10,7 +9,15 @@ AAIRAIController::AAIRAIController()
     AIPerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>("AIPerceptionComponent");
 }
 
-void AAIRAIController::SetTargetToy_Implementation(const AAIRToy* TargetToy) {}
+void AAIRAIController::SetTargetToy_Implementation(const AAIRToy* TargetToy) 
+{
+    ChasingToy = true;
+}
+
+void AAIRAIController::ClearTargetToy()
+{
+    ChasingToy = false;
+}
 
 void AAIRAIController::PickupToy(AAIRToy* TargetToy)
 {

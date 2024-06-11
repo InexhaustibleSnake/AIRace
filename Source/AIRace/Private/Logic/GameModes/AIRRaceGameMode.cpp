@@ -25,12 +25,12 @@ void AAIRRaceGameMode::BeginPlay()
     }
 }
 
-void AAIRRaceGameMode::OnAIControllerDestroyed(AActor* DestroyedAIActor) 
+void AAIRRaceGameMode::OnAIControllerDestroyed(AActor* DestroyedAIActor)
 {
     const auto AIController = Cast<AAIRAIController>(DestroyedAIActor);
     if (!AIController) return;
 
-    AIController->OnToyPickedUp.Unbind();    
+    AIController->OnToyPickedUp.Unbind();
 }
 
 void AAIRRaceGameMode::OnNewToySpawned(AAIRToy* NewToy)
@@ -61,6 +61,8 @@ void AAIRRaceGameMode::OnToyUsed(AAIRToy* NewToy)
 
 TArray<AAIRAIController*> AAIRRaceGameMode::GetAIControllers() const
 {
+    if (!GetWorld()) return TArray<AAIRAIController*>();
+
     TArray<AAIRAIController*> ReceivedAIControllers;
 
     for (TActorIterator<AAIRAIController> OneAIController(GetWorld()); OneAIController; ++OneAIController)
@@ -78,6 +80,13 @@ void AAIRRaceGameMode::OnToyPickedUp(AAIRToy* Toy, AAIRAICharacter* ByAICharacte
     if (!Toy) return;
 
     Toy->ReturnToy();
+
+    for (auto OneAIController : GetAIControllers())
+    {
+        if (!OneAIController) continue;
+
+        OneAIController->ClearTargetToy();
+    }
 
     if (!ByAICharacter) return;
 

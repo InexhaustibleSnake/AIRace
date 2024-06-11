@@ -24,6 +24,9 @@ public:
     void SetTargetToy(const AAIRToy* TargetToy);
     void SetTargetToy_Implementation(const AAIRToy* TargetToy);
 
+    UFUNCTION(BlueprintNativeEvent, Category = "AI")
+    void ClearTargetToy();
+
     FOnToyPickedUpSignature OnToyPickedUp;
 
 protected:
@@ -32,4 +35,7 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI")
     TObjectPtr<UAIPerceptionComponent> AIPerceptionComponent;
+
+    UPROPERTY(BlueprintReadOnly, Category = "AI")
+    bool ChasingToy = false;
 };
