@@ -7,11 +7,13 @@
 #include "AI/AIRAIController.h"
 #include "Items/AIRToy.h"
 #include "EngineUtils.h"
+#include "Logic/GameStates/AIRGameState.h"
 
 AAIRRaceGameMode::AAIRRaceGameMode()
 {
     DefaultPawnClass = AAIRPlayerCharacter::StaticClass();
     PlayerStateClass = AAIRPlayerState::StaticClass();
+    GameStateClass = AAIRGameState::StaticClass();
 }
 
 void AAIRRaceGameMode::BeginPlay()
