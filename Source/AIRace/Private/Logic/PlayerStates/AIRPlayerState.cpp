@@ -2,7 +2,13 @@
 
 #include "Logic/PlayerStates/AIRPlayerState.h"
 
-void AAIRPlayerState::OnRep_Score() 
+void AAIRPlayerState::AddScores(float Amount)
 {
-    OnScoreChanged.Broadcast(Score);
+    SetScore(GetScore() + Amount);
+    OnRep_Score();
+}
+
+void AAIRPlayerState::OnRep_Score()
+{
+    OnScoreChanged.Broadcast(GetScore());
 }

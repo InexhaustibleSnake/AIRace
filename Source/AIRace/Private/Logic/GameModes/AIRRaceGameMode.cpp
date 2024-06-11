@@ -103,5 +103,5 @@ void AAIRRaceGameMode::OnToyPickedUp(AAIRToy* Toy, AAIRAIController* ByAIControl
     const auto AIRPlayerState = ByAIController->GetPlayerState<AAIRPlayerState>();
     if (!AIRPlayerState) return;
 
-    AIRPlayerState->SetScore(AIRPlayerState->GetScore() + Toy->GetToyValue());
+    AIRPlayerState->AddScores(Toy->GetToyValue());
 }
