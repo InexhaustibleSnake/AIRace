@@ -66,11 +66,16 @@ void AAIRRaceGameMode::OnToyUsed(AAIRToy* NewToy)
         OneAIController->SetTargetToy(NewToy);
     }
 
+    SetCanToysBeUsed(false);
+}
+
+void AAIRRaceGameMode::SetCanToysBeUsed(bool CanBeUsed)
+{
     for (auto OneToy : Toys)
     {
         if (!OneToy) continue;
 
-        OneToy->SetCanUseToy(false);
+        OneToy->SetCanUseToy(CanBeUsed);
     }
 }
 
@@ -92,12 +97,7 @@ TArray<AAIRAIController*> AAIRRaceGameMode::GetAIControllers() const
 
 void AAIRRaceGameMode::OnToyPickedUp(AAIRToy* Toy, AAIRAICharacter* ByAICharacter)
 {
-    for (auto OneToy : Toys)
-    {
-        if (!OneToy) continue;
-
-        OneToy->SetCanUseToy(true);
-    }
+    SetCanToysBeUsed(true);
 
     if (!Toy) return;
 

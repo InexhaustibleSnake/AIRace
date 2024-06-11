@@ -6,6 +6,8 @@
 #include "GameFramework/GameModeBase.h"
 #include "AIRRaceGameMode.generated.h"
 
+/*This GameMode is used as an mediator between the toys and the AI*/
+
 class AAIRToy;
 class AAIRAICharacter;
 class AAIRAIController;
@@ -32,6 +34,8 @@ protected:
 
     UFUNCTION()
     void OnToyUsed(AAIRToy* NewToy);
+
+    void SetCanToysBeUsed(bool CanBeUsed);
 
     template <typename T>
     TArray<T*> FindActorsOfClass(const TSubclassOf<AActor> ActorClass)

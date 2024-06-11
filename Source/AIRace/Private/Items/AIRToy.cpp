@@ -38,8 +38,6 @@ void AAIRToy::PrimaryUse()
 
 void AAIRToy::SeconderyUse()
 {
-    if (!CanUseItem()) return;
-
     ToyDataIndex = ++ToyDataIndex % DefaultToyData.Num();
 
     OnRep_ToyDataIndex();
