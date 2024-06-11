@@ -93,15 +93,20 @@ FVector AAIRToy::GetLaunchVelocity() const
     return LaunchVelocity;
 }
 
+void AAIRToy::SetCanUseToy(bool CanUse)
+{
+    CanUseToy = CanUse;
+}
+
+bool AAIRToy::CanUseItem() const
+{
+    return InHands && CanUseToy;
+}
+
 void AAIRToy::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
     DOREPLIFETIME(AAIRToy, InHands);
     DOREPLIFETIME(AAIRToy, ToyDataIndex);
-}
-
-bool AAIRToy::CanUseItem() const
-{
-    return InHands;
 }

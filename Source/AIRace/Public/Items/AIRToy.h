@@ -38,6 +38,8 @@ public:
     UFUNCTION(BlueprintCallable)
     int32 GetToyValue() const { return ToyValue; }
 
+    void SetCanUseToy(bool CanUse);
+
 protected:
     virtual void BeginPlay() override;
 
@@ -64,6 +66,8 @@ protected:
 
     UPROPERTY(ReplicatedUsing = OnRep_InHands)
     bool InHands = true;
+
+    bool CanUseToy = true;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Toy")
     TArray<FToyData> DefaultToyData;

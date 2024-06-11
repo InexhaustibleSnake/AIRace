@@ -33,5 +33,26 @@ protected:
     UFUNCTION()
     void OnToyUsed(AAIRToy* NewToy);
 
+    template <typename T>
+    TArray<T*> FindActorsOfClass(const TSubclassOf<AActor> ActorClass)
+    {
+        if (!GetWorld()) return TArray<T*>();
+
+        TArray<T*> ReceivedActors;
+
+        for (TActorIterator<T> OneActor(GetWorld()); OneActor; ++OneActor)
+        {
+            if (!OneActor) continue;
+
+            ReceivedActors.Add(*OneActor);
+        }
+
+        return ReceivedActors;
+    }
+
     TArray<AAIRAIController*> GetAIControllers() const;
+
+    TArray<AAIRAIController*> AIControllers;
+
+    TArray<AAIRToy*> Toys;
 };

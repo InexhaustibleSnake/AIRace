@@ -16,12 +16,14 @@ void AAIRRaceGameMode::BeginPlay()
 {
     Super::BeginPlay();
 
-    for (const auto OneAIController : GetAIControllers())
+    for (const auto OneAIController : FindActorsOfClass<AAIRAIController>(AAIRAIController::StaticClass()))
     {
         if (!OneAIController) continue;
 
         OneAIController->OnToyPickedUp.BindUFunction(this, "OnToyPickedUp");
         OneAIController->OnDestroyed.AddDynamic(this, &AAIRRaceGameMode::OnAIControllerDestroyed);
+
+        AIControllers.Add(OneAIController);
     }
 }
 
@@ -38,6 +40,8 @@ void AAIRRaceGameMode::OnNewToySpawned(AAIRToy* NewToy)
     if (!NewToy) return;
 
     NewToy->OnToyUsed.AddDynamic(this, &AAIRRaceGameMode::OnToyUsed);
+
+    Toys.Add(NewToy);
 }
 
 void AAIRRaceGameMode::OnToyDestroyed(AAIRToy* DestroyedToy)
@@ -45,17 +49,28 @@ void AAIRRaceGameMode::OnToyDestroyed(AAIRToy* DestroyedToy)
     if (!DestroyedToy) return;
 
     DestroyedToy->OnToyUsed.Remove(this, "OnToyUsed");
+
+    if (!Toys.Contains(DestroyedToy)) return;
+
+    Toys.Remove(DestroyedToy);
 }
 
 void AAIRRaceGameMode::OnToyUsed(AAIRToy* NewToy)
 {
     if (!NewToy) return;
 
-    for (auto OneAIController : GetAIControllers())
+    for (auto OneAIController : AIControllers)
     {
         if (!OneAIController) continue;
 
         OneAIController->SetTargetToy(NewToy);
+    }
+
+    for (auto OneToy : Toys)
+    {
+        if (!OneToy) continue;
+
+        OneToy->SetCanUseToy(false);
     }
 }
 
@@ -77,11 +92,18 @@ TArray<AAIRAIController*> AAIRRaceGameMode::GetAIControllers() const
 
 void AAIRRaceGameMode::OnToyPickedUp(AAIRToy* Toy, AAIRAICharacter* ByAICharacter)
 {
+    for (auto OneToy : Toys)
+    {
+        if (!OneToy) continue;
+
+        OneToy->SetCanUseToy(true);
+    }
+
     if (!Toy) return;
 
     Toy->ReturnToy();
 
-    for (auto OneAIController : GetAIControllers())
+    for (auto OneAIController : FindActorsOfClass<AAIRAIController>(AAIRAIController::StaticClass()))
     {
         if (!OneAIController) continue;
 

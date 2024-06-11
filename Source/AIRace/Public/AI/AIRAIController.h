@@ -24,7 +24,6 @@ public:
     void SetTargetToy(const AAIRToy* TargetToy);
     void SetTargetToy_Implementation(const AAIRToy* TargetToy);
 
-    UFUNCTION(BlueprintNativeEvent, Category = "AI")
     void ClearTargetToy();
 
     FOnToyPickedUpSignature OnToyPickedUp;
