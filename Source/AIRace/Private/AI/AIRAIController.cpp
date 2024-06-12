@@ -15,7 +15,7 @@ void AAIRAIController::SetTargetToy_Implementation(const AAIRToy* TargetToy)
     ChasingToy = true;
 }
 
-void AAIRAIController::ClearTargetToy()
+void AAIRAIController::ClearTargetToy_Implementation()
 {
     ChasingToy = false;
     StopMovement();

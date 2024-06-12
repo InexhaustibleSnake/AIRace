@@ -24,7 +24,9 @@ public:
     void SetTargetToy(const AAIRToy* TargetToy);
     void SetTargetToy_Implementation(const AAIRToy* TargetToy);
 
+    UFUNCTION(BlueprintNativeEvent, Category = "AI")
     void ClearTargetToy();
+    void ClearTargetToy_Implementation();
 
     FOnToyPickedUpSignature OnToyPickedUp;
 
@@ -37,4 +39,7 @@ protected:
 
     UPROPERTY(BlueprintReadOnly, Category = "AI")
     bool ChasingToy = false;
+
+    UPROPERTY(BlueprintReadWrite, Category = "AI")
+    bool GoForAToy = false;
 };

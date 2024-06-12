@@ -2,7 +2,8 @@
 
 #include "Logic/PlayerControllers/AIRPlayerController.h"
 #include "Logic/GameStates/AIRGameState.h"
-
+#include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
 void AAIRPlayerController::BeginPlay()
 {
     Super::BeginPlay();
@@ -24,8 +25,8 @@ void AAIRPlayerController::OnMatchStateChanged(const MatchState NewState)
 
     MatchStarted ? SetInputMode(FInputModeGameOnly()) : SetInputMode(FInputModeUIOnly());
 
-    if (!MatchStarted)
+    if (!MatchStarted && GetCharacter() && GetCharacter()->GetCharacterMovement())
     {
-        StopMovement();
+        GetCharacter()->GetCharacterMovement()->StopMovementImmediately();
     }
 }
