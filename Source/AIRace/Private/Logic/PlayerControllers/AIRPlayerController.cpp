@@ -23,4 +23,9 @@ void AAIRPlayerController::OnMatchStateChanged(const MatchState NewState)
     SetShowMouseCursor(MatchStarted ? false : true);
 
     MatchStarted ? SetInputMode(FInputModeGameOnly()) : SetInputMode(FInputModeUIOnly());
+
+    if (!MatchStarted)
+    {
+        StopMovement();
+    }
 }

@@ -149,4 +149,6 @@ void AAIRRaceGameMode::OnMatchEnded()
 
         OneToy->ReturnToy();
     }
+
+    SetCanToysBeUsed(true);
 }
