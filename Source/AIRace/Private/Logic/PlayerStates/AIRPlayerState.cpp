@@ -8,6 +8,12 @@ void AAIRPlayerState::AddScores(float Amount)
     OnRep_Score();
 }
 
+void AAIRPlayerState::ClearScore()
+{
+    SetScore(0);
+    OnRep_Score();
+}
+
 void AAIRPlayerState::OnRep_Score()
 {
     OnScoreChanged.Broadcast(GetScore());

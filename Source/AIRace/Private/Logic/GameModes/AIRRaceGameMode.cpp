@@ -130,7 +130,7 @@ void AAIRRaceGameMode::RestartGame()
         const auto AIRPlayerState = OneAIController->GetPlayerState<AAIRPlayerState>();
         if (!AIRPlayerState) continue;
 
-        AIRPlayerState->SetScore(0);
+        AIRPlayerState->ClearScore();
     }
 }
 

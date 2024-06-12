@@ -19,6 +19,8 @@ public:
 
     void AddScores(float Amount);  // Default SetScore doesn't trigger OnRep_Score()
 
+    void ClearScore(); 
+
 protected:
     virtual void OnRep_Score() override;
 };

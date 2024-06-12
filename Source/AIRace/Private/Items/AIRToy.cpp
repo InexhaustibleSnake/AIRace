@@ -15,6 +15,8 @@ void AAIRToy::BeginPlay()
     {
         GetGameMode()->OnNewToySpawned(this);
     }
+
+    OnRep_ToyDataIndex();
 }
 
 void AAIRToy::SetToyData(int32 DataIndex)
