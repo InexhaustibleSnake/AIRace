@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "Logic/GameStates/AIRGameState.h"
 #include "AIRRaceGameMode.generated.h"
 
 /*This GameMode is used as an mediator between the toys and the AI*/
@@ -26,8 +27,16 @@ public:
     UFUNCTION()
     void OnToyPickedUp(AAIRToy* Toy, AAIRAIController* ByAIController);
 
+    void RestartGame();
+
+    UFUNCTION()
+    void OnMatchEnded();
+
 protected:
     virtual void BeginPlay() override;
+
+    UFUNCTION()
+    void OnMatchStateChanged(const MatchState NewState);
 
     UFUNCTION()
     void OnAIControllerDestroyed(AActor* DestroyedAIActor);

@@ -8,12 +8,14 @@
 #include "Items/AIRToy.h"
 #include "EngineUtils.h"
 #include "Logic/GameStates/AIRGameState.h"
+#include "Logic/PlayerControllers/AIRPlayerController.h"
 
 AAIRRaceGameMode::AAIRRaceGameMode()
 {
     DefaultPawnClass = AAIRPlayerCharacter::StaticClass();
     PlayerStateClass = AAIRPlayerState::StaticClass();
     GameStateClass = AAIRGameState::StaticClass();
+    PlayerControllerClass = AAIRPlayerController::StaticClass();
 }
 
 void AAIRRaceGameMode::BeginPlay()
@@ -28,6 +30,19 @@ void AAIRRaceGameMode::BeginPlay()
         OneAIController->OnDestroyed.AddDynamic(this, &AAIRRaceGameMode::OnAIControllerDestroyed);
 
         AIControllers.Add(OneAIController);
+    }
+
+    if (auto AIRGameState = Cast<AAIRGameState>(GameState))
+    {
+        AIRGameState->OnMatchStateChanged.AddDynamic(this, &AAIRRaceGameMode::OnMatchStateChanged);
+    }
+}
+
+void AAIRRaceGameMode::OnMatchStateChanged(const MatchState NewState)
+{
+    if (NewState == MatchState::Ended)
+    {
+        OnMatchEnded();
     }
 }
 
@@ -104,4 +119,34 @@ void AAIRRaceGameMode::OnToyPickedUp(AAIRToy* Toy, AAIRAIController* ByAIControl
     if (!AIRPlayerState) return;
 
     AIRPlayerState->AddScores(Toy->GetToyValue());
+}
+
+void AAIRRaceGameMode::RestartGame()
+{
+    for (auto OneAIController : AIControllers)
+    {
+        if (!OneAIController) continue;
+
+        const auto AIRPlayerState = OneAIController->GetPlayerState<AAIRPlayerState>();
+        if (!AIRPlayerState) continue;
+
+        AIRPlayerState->SetScore(0);
+    }
+}
+
+void AAIRRaceGameMode::OnMatchEnded()
+{
+    for (auto OneAIController : AIControllers)
+    {
+        if (!OneAIController) continue;
+
+        OneAIController->ClearTargetToy();
+    }
+
+    for (auto OneToy : Toys)
+    {
+        if (!OneToy || OneToy->GetInHands()) continue;
+
+        OneToy->ReturnToy();
+    }
 }

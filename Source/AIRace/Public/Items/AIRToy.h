@@ -40,6 +40,8 @@ public:
 
     void SetCanUseToy(bool CanUse);
 
+    bool GetInHands() const { return InHands; }
+
 protected:
     virtual void BeginPlay() override;
 

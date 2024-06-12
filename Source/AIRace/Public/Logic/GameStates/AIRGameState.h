@@ -6,6 +6,15 @@
 #include "GameFramework/GameStateBase.h"
 #include "AIRGameState.generated.h"
 
+UENUM(BlueprintType)
+enum class MatchState : uint8
+{
+    Started,
+    Ended
+};
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMatchStateChangedSignature, MatchState, NewState);
+
 UCLASS()
 class AIRACE_API AAIRGameState : public AGameStateBase
 {
@@ -13,7 +22,16 @@ class AIRACE_API AAIRGameState : public AGameStateBase
 
 public:
     UFUNCTION(BlueprintCallable, Category = "AIRGameState")
+    void StartTimer();
+
+    UFUNCTION(BlueprintCallable, Category = "AIRGameState")
     float GetMatchRemainingTime() const { return RemainingMatchTime; }
+
+    UFUNCTION(BlueprintCallable, Category = "AIRGameState")
+    void RestartGame();
+
+    UPROPERTY(BlueprintAssignable, Category = "AIRGameState")
+    FOnMatchStateChangedSignature OnMatchStateChanged;
 
 protected:
     virtual void BeginPlay() override;
@@ -22,7 +40,9 @@ protected:
 
     void GameTimerUpdate();
 
-    UPROPERTY(meta = (Units = "Seconds"))
+    void ResetTimer();
+
+    UPROPERTY(EditDefaultsOnly, meta = (Units = "Seconds"), meta = (ClampMin = "10"))
     float MatchTime = 60.0f;
 
     UPROPERTY(Replicated, meta = (Units = "Seconds"))
