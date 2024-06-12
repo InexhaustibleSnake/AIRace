@@ -29,6 +29,8 @@ void AAIRGameState::RestartGame()
 
 void AAIRGameState::StartTimer()
 {
+    RemainingMatchTime = MatchTime;
+
     GetWorldTimerManager().SetTimer(MatchTimer, this, &AAIRGameState::GameTimerUpdate, 1.0f, true);
 }
 

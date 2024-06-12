@@ -3,8 +3,6 @@
 #include "Logic/PlayerControllers/AIRPlayerController.h"
 #include "Logic/GameStates/AIRGameState.h"
 
-#include "Logic/GameStates/AIRGameState.h"
-
 void AAIRPlayerController::BeginPlay()
 {
     Super::BeginPlay();

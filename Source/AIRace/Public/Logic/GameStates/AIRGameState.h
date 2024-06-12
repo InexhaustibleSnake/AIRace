@@ -38,8 +38,6 @@ protected:
 
     virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-
-
     void GameTimerUpdate();
 
     void ResetTimer();
@@ -51,7 +49,7 @@ protected:
     float MatchTime = 60.0f;
 
     UPROPERTY(Replicated, meta = (Units = "Seconds"))
-    float RemainingMatchTime = MatchTime;
+    float RemainingMatchTime = 10.0f;
 
     UPROPERTY(ReplicatedUsing = OnRep_MatchState)
     MatchState CurrentMatchState;
