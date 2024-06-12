@@ -9,6 +9,5 @@
 UCLASS()
 class AIRACE_API AAIRBaseCharacter : public ACharacter
 {
-	GENERATED_BODY()
-
+    GENERATED_BODY()
 };
