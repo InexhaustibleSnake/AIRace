@@ -2,19 +2,35 @@
 
 #include "Logic/PlayerControllers/AIRPlayerController.h"
 #include "Logic/GameStates/AIRGameState.h"
-#include "GameFramework/Character.h"
-#include "GameFramework/CharacterMovementComponent.h"
+
+#include "Logic/GameStates/AIRGameState.h"
+
 void AAIRPlayerController::BeginPlay()
 {
     Super::BeginPlay();
 
-    if (GetWorld())
+    if (GetAIRGameState())
     {
-        const auto AIRGameState = Cast<AAIRGameState>(GetWorld()->GetGameState());
-        if (!AIRGameState) return;
-
-        AIRGameState->OnMatchStateChanged.AddDynamic(this, &AAIRPlayerController::OnMatchStateChanged);
+        GetAIRGameState()->OnMatchStateChanged.AddDynamic(this, &AAIRPlayerController::OnMatchStateChanged);
     }
+}
+
+void AAIRPlayerController::RestartMatch()
+{
+    if (!HasAuthority())
+    {
+        ServerRestartGame();
+        return;
+    }
+
+    if (!GetAIRGameState()) return;
+
+    GetAIRGameState()->RestartGame();
+}
+
+void AAIRPlayerController::ServerRestartGame_Implementation()
+{
+    RestartMatch();
 }
 
 void AAIRPlayerController::OnMatchStateChanged(const MatchState NewState)
@@ -24,9 +40,9 @@ void AAIRPlayerController::OnMatchStateChanged(const MatchState NewState)
     SetShowMouseCursor(MatchStarted ? false : true);
 
     MatchStarted ? SetInputMode(FInputModeGameOnly()) : SetInputMode(FInputModeUIOnly());
+}
 
-    if (!MatchStarted && GetCharacter() && GetCharacter()->GetCharacterMovement())
-    {
-        GetCharacter()->GetCharacterMovement()->StopMovementImmediately();
-    }
+AAIRGameState* AAIRPlayerController::GetAIRGameState() const
+{
+    return GetWorld() ? Cast<AAIRGameState>(GetWorld()->GetGameState()) : nullptr;
 }

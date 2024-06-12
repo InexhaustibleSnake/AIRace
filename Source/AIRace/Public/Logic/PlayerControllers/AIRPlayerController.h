@@ -12,9 +12,19 @@ class AIRACE_API AAIRPlayerController : public APlayerController
 {
     GENERATED_BODY()
 
+public:
+    UFUNCTION(BlueprintCallable, Category = "AIRPlayerController")
+    void RestartMatch();
+
 protected:
     virtual void BeginPlay() override;
 
+    UFUNCTION(Server, Reliable)
+    void ServerRestartGame();
+    void ServerRestartGame_Implementation();
+
     UFUNCTION()
     void OnMatchStateChanged(const MatchState NewState);
+
+    AAIRGameState* GetAIRGameState() const;
 };

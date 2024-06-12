@@ -38,15 +38,23 @@ protected:
 
     virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+
+
     void GameTimerUpdate();
 
     void ResetTimer();
+
+    UFUNCTION()
+    void OnRep_MatchState();
 
     UPROPERTY(EditDefaultsOnly, meta = (Units = "Seconds"), meta = (ClampMin = "10"))
     float MatchTime = 60.0f;
 
     UPROPERTY(Replicated, meta = (Units = "Seconds"))
     float RemainingMatchTime = MatchTime;
+
+    UPROPERTY(ReplicatedUsing = OnRep_MatchState)
+    MatchState CurrentMatchState;
 
     FTimerHandle MatchTimer;
 };

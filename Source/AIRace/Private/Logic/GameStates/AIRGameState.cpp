@@ -13,8 +13,6 @@ void AAIRGameState::BeginPlay()
 
 void AAIRGameState::RestartGame()
 {
-    OnMatchStateChanged.Broadcast(MatchState::Started);
-
     if (GetWorld())
     {
         auto AIRGameMode = Cast<AAIRRaceGameMode>(GetWorld()->GetAuthGameMode());
@@ -25,7 +23,8 @@ void AAIRGameState::RestartGame()
         }
     }
 
-    ResetTimer();
+    CurrentMatchState = MatchState::Started;
+    OnRep_MatchState();
 }
 
 void AAIRGameState::StartTimer()
@@ -41,7 +40,8 @@ void AAIRGameState::GameTimerUpdate()
 
     GetWorldTimerManager().ClearTimer(MatchTimer);
 
-    OnMatchStateChanged.Broadcast(MatchState::Ended);
+    CurrentMatchState = MatchState::Ended;
+    OnRep_MatchState();
 }
 
 void AAIRGameState::ResetTimer()
@@ -51,9 +51,20 @@ void AAIRGameState::ResetTimer()
     StartTimer();
 }
 
+void AAIRGameState::OnRep_MatchState()
+{
+    OnMatchStateChanged.Broadcast(CurrentMatchState);
+
+    if (CurrentMatchState == MatchState::Started)
+    {
+        ResetTimer();
+    }
+}
+
 void AAIRGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
     DOREPLIFETIME_CONDITION(AAIRGameState, RemainingMatchTime, COND_InitialOnly);
+    DOREPLIFETIME(AAIRGameState, CurrentMatchState);
 }
