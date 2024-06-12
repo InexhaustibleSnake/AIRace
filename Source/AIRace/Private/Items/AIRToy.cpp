@@ -49,11 +49,11 @@ void AAIRToy::ThrowToy()
 {
     if (!ItemMeshComponent) return;
 
+    ItemMeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+
     ItemMeshComponent->SetSimulatePhysics(true);
 
     ItemMeshComponent->SetPhysicsLinearVelocity(GetLaunchVelocity());
-
-    ItemMeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 
     DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
