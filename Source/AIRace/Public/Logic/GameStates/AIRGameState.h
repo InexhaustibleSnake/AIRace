@@ -42,6 +42,8 @@ protected:
 
     void ResetTimer();
 
+    void SetMatchState(const MatchState NewState);
+
     UFUNCTION()
     void OnRep_MatchState();
 

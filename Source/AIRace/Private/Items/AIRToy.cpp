@@ -33,13 +33,13 @@ void AAIRToy::PrimaryUse()
 {
     if (!CanUseItem()) return;
 
-    InHands = false;
-
-    OnRep_InHands();
+    SetInHands(false);
 }
 
 void AAIRToy::SeconderyUse()
 {
+    if (!GetInHands()) return;
+
     ToyDataIndex = ++ToyDataIndex % DefaultToyData.Num();
 
     OnRep_ToyDataIndex();
@@ -62,14 +62,12 @@ void AAIRToy::ThrowToy()
 
 void AAIRToy::ReturnToy()
 {
-    InHands = true;
-
-    OnRep_InHands();
+    SetInHands(true);
 }
 
 void AAIRToy::OnRep_InHands()
 {
-    InHands ? AttachToOwner() : ThrowToy();
+    GetInHands() ? AttachToOwner() : ThrowToy();
 }
 
 void AAIRToy::OnRep_ToyDataIndex()
@@ -98,9 +96,16 @@ void AAIRToy::SetCanUseToy(bool CanUse)
     CanUseToy = CanUse;
 }
 
+void AAIRToy::SetInHands(bool bInHands)
+{
+    InHands = bInHands;
+
+    OnRep_InHands();
+}
+
 bool AAIRToy::CanUseItem() const
 {
-    return InHands && CanUseToy;
+    return GetInHands() && GetCanUseToy();
 }
 
 void AAIRToy::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

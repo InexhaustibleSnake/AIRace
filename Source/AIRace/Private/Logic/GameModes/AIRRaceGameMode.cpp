@@ -27,7 +27,6 @@ void AAIRRaceGameMode::BeginPlay()
         if (!OneAIController) continue;
 
         OneAIController->OnToyPickedUp.BindUFunction(this, "OnToyPickedUp");
-        OneAIController->OnDestroyed.AddDynamic(this, &AAIRRaceGameMode::OnAIControllerDestroyed);
 
         AIControllers.Add(OneAIController);
     }
@@ -38,20 +37,22 @@ void AAIRRaceGameMode::BeginPlay()
     }
 }
 
+void AAIRRaceGameMode::ClearAITargetToys()
+{
+    for (auto OneAIController : AIControllers)
+    {
+        if (!OneAIController) continue;
+
+        OneAIController->ClearTargetToy();
+    }
+}
+
 void AAIRRaceGameMode::OnMatchStateChanged(const MatchState NewState)
 {
     if (NewState == MatchState::Ended)
     {
         OnMatchEnded();
     }
-}
-
-void AAIRRaceGameMode::OnAIControllerDestroyed(AActor* DestroyedAIActor)
-{
-    const auto AIController = Cast<AAIRAIController>(DestroyedAIActor);
-    if (!AIController) return;
-
-    AIController->OnToyPickedUp.Unbind();
 }
 
 void AAIRRaceGameMode::OnNewToySpawned(AAIRToy* NewToy)
@@ -106,12 +107,7 @@ void AAIRRaceGameMode::OnToyPickedUp(AAIRToy* Toy, AAIRAIController* ByAIControl
 
     Toy->ReturnToy();
 
-    for (auto OneAIController : AIControllers)
-    {
-        if (!OneAIController) continue;
-
-        OneAIController->ClearTargetToy();
-    }
+    ClearAITargetToys();
 
     if (!ByAIController) return;
 
@@ -136,12 +132,7 @@ void AAIRRaceGameMode::RestartGame()
 
 void AAIRRaceGameMode::OnMatchEnded()
 {
-    for (auto OneAIController : AIControllers)
-    {
-        if (!OneAIController) continue;
-
-        OneAIController->ClearTargetToy();
-    }
+    ClearAITargetToys();
 
     for (auto OneToy : Toys)
     {

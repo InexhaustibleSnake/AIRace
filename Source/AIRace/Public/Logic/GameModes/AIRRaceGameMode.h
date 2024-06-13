@@ -35,11 +35,10 @@ public:
 protected:
     virtual void BeginPlay() override;
 
-    UFUNCTION()
-    void OnMatchStateChanged(const MatchState NewState);
+    void ClearAITargetToys();
 
     UFUNCTION()
-    void OnAIControllerDestroyed(AActor* DestroyedAIActor);
+    void OnMatchStateChanged(const MatchState NewState);
 
     UFUNCTION()
     void OnToyUsed(AAIRToy* NewToy);

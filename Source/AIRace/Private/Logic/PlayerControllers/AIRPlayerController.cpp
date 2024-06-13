@@ -2,6 +2,8 @@
 
 #include "Logic/PlayerControllers/AIRPlayerController.h"
 #include "Logic/GameStates/AIRGameState.h"
+#include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 void AAIRPlayerController::BeginPlay()
 {
@@ -35,7 +37,12 @@ void AAIRPlayerController::OnMatchStateChanged(const MatchState NewState)
 {
     bool MatchStarted = NewState == MatchState::Started;
 
-    SetShowMouseCursor(MatchStarted ? false : true);
+    if (GetCharacter() && GetCharacter()->GetCharacterMovement())
+    {
+        GetCharacter()->GetCharacterMovement()->SetMovementMode(MatchStarted ? EMovementMode::MOVE_Walking : EMovementMode::MOVE_None);
+    }
+
+    SetShowMouseCursor(!MatchStarted);
 
     MatchStarted ? SetInputMode(FInputModeGameOnly()) : SetInputMode(FInputModeUIOnly());
 }

@@ -23,8 +23,7 @@ void AAIRGameState::RestartGame()
         }
     }
 
-    CurrentMatchState = MatchState::Started;
-    OnRep_MatchState();
+    SetMatchState(MatchState::Started);
 }
 
 void AAIRGameState::StartTimer()
@@ -42,8 +41,7 @@ void AAIRGameState::GameTimerUpdate()
 
     GetWorldTimerManager().ClearTimer(MatchTimer);
 
-    CurrentMatchState = MatchState::Ended;
-    OnRep_MatchState();
+    SetMatchState(MatchState::Ended);
 }
 
 void AAIRGameState::ResetTimer()
@@ -51,6 +49,12 @@ void AAIRGameState::ResetTimer()
     RemainingMatchTime = MatchTime;
 
     StartTimer();
+}
+
+void AAIRGameState::SetMatchState(const MatchState NewState) 
+{
+    CurrentMatchState = NewState;
+    OnRep_MatchState();
 }
 
 void AAIRGameState::OnRep_MatchState()
